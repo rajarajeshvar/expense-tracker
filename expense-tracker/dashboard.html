@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview - Expense Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-top: 1.5rem;
+    }
+    .back-btn {
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover {
+      background: rgba(177, 156, 217, 0.2);
+    }
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #333;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 0.875rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-label {
+      font-size: 0.875rem;
+      color: #666;
+    }
+    .card-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .card-hint {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    .balance { color: #b19cd9; }
+    .income { color: #16a34a; }
+    .expense { color: #dc2626; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 0.75rem;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #666;
+    }
+    .btn {
+      width: 100%;
+      padding: 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #b19cd9, #f4aaff);
+      color: white;
+    }
+    .btn-danger {
+      background: transparent;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      color: #dc2626;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='overview.html'">←</button>
+      <div>
+        <h1>Your Month in Review 💫</h1>
+        <p class="subtitle">See how you're doing financially</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <span style="font-size: 1.75rem;">💰</span>
+          <span class="card-label">Current Balance</span>
+        </div>
+        <div class="card-value balance" id="balance">$0.00</div>
+        <div class="card-hint" id="balanceHint">You're doing great! 🎉</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span style="font-size: 1.75rem;">📈</span>
+          <span class="card-label">Total Income</span>
+        </div>
+        <div class="card-value income" id="income">$0.00</div>
+        <div class="card-hint" id="incomeCount">0 income sources</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span style="font-size: 1.75rem;">📉</span>
+          <span class="card-label">Total Expenses</span>
+        </div>
+        <div class="card-value expense" id="expenses">$0.00</div>
+        <div class="card-hint" id="expenseCount">0 expenses tracked</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Weekly Overview 📈</h2>
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 1rem; font-size: 1.25rem;">Quick Stats 📊</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value balance" id="totalCount">0</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value income" id="incomeEntries">0</div>
+          <div class="stat-label">Income Entries</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value expense" id="expenseEntries">0</div>
+          <div class="stat-label">Expense Entries</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value balance" id="spendingRate">0%</div>
+          <div class="stat-label">Spending Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-grid">
+      <button class="btn btn-primary" onclick="window.location.href='overview.html'">
+        Continue Tracking 💸
+      </button>
+      <button class="btn btn-danger" onclick="clearAllData()">
+        🔄 Reset All Data
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+    const totalIncome = transactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const totalExpenses = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const balance = totalIncome - totalExpenses;
+
+    document.getElementById('balance').textContent = '$' + balance.toFixed(2);
+    document.getElementById('income').textContent = '$' + totalIncome.toFixed(2);
+    document.getElementById('expenses').textContent = '$' + totalExpenses.toFixed(2);
+
+    document.getElementById('balanceHint').textContent = balance >= 0 ? "You're doing great! 🎉" : "Time to cut back a bit 💪";
+    document.getElementById('incomeCount').textContent = transactions.filter(t => t.type === 'income').length + ' income sources';
+    document.getElementById('expenseCount').textContent = transactions.filter(t => t.type === 'expense').length + ' expenses tracked';
+
+    document.getElementById('totalCount').textContent = transactions.length;
+    document.getElementById('incomeEntries').textContent = transactions.filter(t => t.type === 'income').length;
+    document.getElementById('expenseEntries').textContent = transactions.filter(t => t.type === 'expense').length;
+    document.getElementById('spendingRate').textContent = totalExpenses > 0 ? ((totalExpenses / totalIncome) * 100).toFixed(0) + '%' : '0%';
+
+    // Prepare chart data
+    const weekMap = new Map();
+    transactions.forEach(t => {
+      const date = new Date(t.date);
+      const weekStart = new Date(date);
+      weekStart.setDate(date.getDate() - date.getDay());
+      const weekKey = weekStart.toLocaleDateString();
+      
+      if (!weekMap.has(weekKey)) {
+        weekMap.set(weekKey, { income: 0, expense: 0 });
+      }
+      
+      const week = weekMap.get(weekKey);
+      if (t.type === 'income') {
+        week.income += t.amount;
+      } else {
+        week.expense += t.amount;
+      }
+    });
+
+    const chartData = Array.from(weekMap.entries())
+      .map(([week, data]) => ({
+        week,
+        income: data.income,
+        expense: data.expense
+      }))
+      .slice(-4);
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartData.map(d => d.week),
+        datasets: [
+          {
+            label: 'Income',
+            data: chartData.map(d => d.income),
+            backgroundColor: 'rgba(22, 163, 74, 0.8)',
+            borderRadius: 8
+          },
+          {
+            label: 'Expenses',
+            data: chartData.map(d => d.expense),
+            backgroundColor: 'rgba(220, 38, 38, 0.8)',
+            borderRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function clearAllData() {
+      if (confirm("Are you sure you want to clear all transactions? This cannot be undone! 🥺")) {
+        localStorage.removeItem('transactions');
+        alert("All data cleared! Starting fresh ✨");
+        window.location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

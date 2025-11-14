@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Expense Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 28rem;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    .emoji {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #b19cd9, #f4aaff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .description {
+      font-size: 0.875rem;
+      color: #666;
+      max-width: 26rem;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .btn {
+      background: linear-gradient(135deg, #b19cd9, #f4aaff);
+      color: white;
+      font-size: 1.125rem;
+      font-weight: 600;
+      padding: 1.5rem 2rem;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(177, 156, 217, 0.3);
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(177, 156, 217, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="emoji">🐷💰</div>
+    <h1>Hi there! 💕</h1>
+    <p class="subtitle">Let's start saving and smiling together</p>
+    <p class="description">
+      Track your income and expenses with a friendly app that helps you understand your money better. 
+      Simple, beautiful, and lovable! ✨
+    </p>
+    <button class="btn" onclick="window.location.href='overview.html'">
+      Start Tracking 💸
+    </button>
+  </div>
+</body>
+</html>
